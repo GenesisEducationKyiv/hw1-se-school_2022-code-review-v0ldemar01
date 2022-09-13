@@ -1,0 +1,29 @@
+{
+    "include": ["src"],
+    "lib": ["esnext"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "~/*": ["./src/*"]
+      },
+      "outDir": "build",
+      "module": "ESNext",
+      "target": "ESNext",
+      "allowJs": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitOverride": true,
+      "skipLibCheck": true,
+      "noImplicitAny": true
+    },
+    "ts-node": {
+      "esm": true,
+      "transpileOnly": true,
+      "files": true,
+  },
+  }

@@ -1,0 +1,1 @@
+export { type IEmailCredentials } from './email-credentials.type';
