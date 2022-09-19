@@ -25,7 +25,11 @@ abstract class AbstractCurrency {
     return this.#nextService;
   }
 
-  getRate(currencyConfig: Record<'from' | 'to', Currency>): Promise<IGetRateAbstractResponseDto> {
+  getRate(_: Record<'from' | 'to', Currency>): Promise<IGetRateAbstractResponseDto> {
+    return Promise.resolve(0);
+  }
+
+  getNextServiceRate(currencyConfig: Record<'from' | 'to', Currency>): Promise<IGetRateAbstractResponseDto> {
     if (this.#nextService) {
       return this.#nextService.getRate(currencyConfig);
     }

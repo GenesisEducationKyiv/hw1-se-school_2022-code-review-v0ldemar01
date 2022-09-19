@@ -22,7 +22,7 @@ class CryptocompareCurrency extends AbstractCurrency {
 
       return amount;
     } catch (err) {
-      return super.getRate({ from, to });
+      return super.getNextServiceRate({ from, to });
     }
   }
 }
