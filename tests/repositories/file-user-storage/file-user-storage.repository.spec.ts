@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import { IUserDto } from '../../../src/common/model-types/model-types.js';
 import {
-  FileStorage,
+  IFileStorage,
 } from '../../../src/data/repositories/file-storage/file-storage.repository.js';
 import {
   FileUserStorage,
@@ -11,7 +11,7 @@ import {
 
 const fileContent = { users: [] as IUserDto[] };
 
-const fileStorage = {} as FileStorage<IUserDto>;
+const fileStorage = {} as IFileStorage<IUserDto>;
 const fileUserStorage = new FileUserStorage({ storage: fileStorage });
 
 describe('FileUserStorageRepository', () => {
