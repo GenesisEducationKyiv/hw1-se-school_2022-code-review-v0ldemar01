@@ -1,4 +1,5 @@
 import nodemailer, { Transporter } from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 interface IEmailTransporterServiceConstructor {
@@ -22,6 +23,12 @@ class EmailTransporter {
     transportOptions: IEmailTransporterServiceConstructor['options'],
   ): Transporter<SMTPTransport.SentMessageInfo> {
     return nodemailer.createTransport(transportOptions);
+  }
+
+  sendEmailViaTransporter(
+    options: Mail.Options,
+  ): Promise<SMTPTransport.SentMessageInfo> {
+    return this.#transporter.sendMail(options);
   }
 }
 

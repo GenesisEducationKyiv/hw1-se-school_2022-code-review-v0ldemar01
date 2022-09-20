@@ -1,27 +1,13 @@
-import { it, jest, describe, expect, beforeEach } from '@jest/globals';
+import { it, jest, expect, describe, beforeEach } from '@jest/globals';
 import { faker } from '@faker-js/faker';
-import { fileURLToPath } from 'url';
-import { resolve, dirname } from 'path';
 
 import { IUserDto } from '../../../src/common/model-types/model-types.js';
-import { ENV } from '../../../src/configs/configs.js';
-import {
-  FileStorage,
-} from '../../../src/data/repositories/file-storage/file-storage.repository.js';
 import {
   FileUserStorage,
 } from '../../../src/data/repositories/file-user-storage/file-user-storage.repository.js';
 import {
   User as UserRepository,
 } from '../../../src/data/repositories/user/user.repository.js';
-
-const filePath = resolve(
-  dirname(
-    fileURLToPath(import.meta.url),
-  ),
-  '../../../src',
-  ENV.APP.STORAGE,
-);
 
 const fileContent = {
   users: [{
@@ -30,25 +16,24 @@ const fileContent = {
   }],
 };
 
-const fileStorage = new FileStorage({ filePath });
-const fileUserStorage = new FileUserStorage({ storage: fileStorage });
+const fileUserStorage = {} as FileUserStorage;
 const userRepository = new UserRepository({
   storage: fileUserStorage,
 });
 
 describe('UserRepository', () => {
-  const fsUserGetAllMock = jest
-    .spyOn(fileUserStorage, 'getAll')
-    .mockImplementation(() => Promise.resolve(fileContent.users));
-  const fsUserGetOneMock = jest
-    .spyOn(fileUserStorage, 'getOne')
-    .mockImplementation((user: Partial<IUserDto>) => Promise.resolve(user));
-  const fsUserWriteOneMock = jest
-    .spyOn(fileUserStorage, 'writeOne')
-    .mockImplementation((newUser) => {
-      fileContent.users.push(newUser);
-      return Promise.resolve();
-    });
+
+  fileUserStorage.getAll = jest.fn<(
+    () => Promise<IUserDto[]>)
+  >().mockImplementation(() => Promise.resolve(fileContent.users));
+
+  fileUserStorage.getOne = jest.fn<(
+    (user: Partial<IUserDto>) => Promise<IUserDto>)
+  >().mockImplementation((user) => Promise.resolve(user as IUserDto));
+
+  fileUserStorage.writeOne = jest.fn<(
+    (user: IUserDto) => Promise<void>)
+  >().mockImplementation(() => Promise.resolve());
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -58,7 +43,7 @@ describe('UserRepository', () => {
     const users = await userRepository.getAll();
 
     expect(users).toEqual(fileContent.users);
-    expect(fsUserGetAllMock).toHaveBeenCalledTimes(1);
+    expect(fileUserStorage.getAll).toHaveBeenCalledTimes(1);
   });
 
   it('should return user by id', async () => {
@@ -67,8 +52,8 @@ describe('UserRepository', () => {
     expect(user).toEqual(expect.objectContaining({
       id: fileContent.users[0].id,
     }));
-    expect(fsUserGetOneMock).toHaveBeenCalledTimes(1);
-    expect(fsUserGetOneMock).toBeCalledWith({
+    expect(fileUserStorage.getOne).toHaveBeenCalledTimes(1);
+    expect(fileUserStorage.getOne).toBeCalledWith({
       id: fileContent.users[0].id,
     });
   });
@@ -81,8 +66,8 @@ describe('UserRepository', () => {
     expect(user).toEqual(expect.objectContaining({
       email: fileContent.users[0].email,
     }));
-    expect(fsUserGetOneMock).toHaveBeenCalledTimes(1);
-    expect(fsUserGetOneMock).toBeCalledWith({
+    expect(fileUserStorage.getOne).toHaveBeenCalledTimes(1);
+    expect(fileUserStorage.getOne).toBeCalledWith({
       email: fileContent.users[0].email,
     });
   });
@@ -91,8 +76,8 @@ describe('UserRepository', () => {
      const user = await userRepository.getOne(fileContent.users[0]);
 
     expect(user).toEqual(fileContent.users[0]);
-    expect(fsUserGetOneMock).toHaveBeenCalledTimes(1);
-    expect(fsUserGetOneMock).toBeCalledWith(fileContent.users[0]);
+    expect(fileUserStorage.getOne).toHaveBeenCalledTimes(1);
+    expect(fileUserStorage.getOne).toBeCalledWith(fileContent.users[0]);
   });
 
   it('should subscribe user', async () => {
@@ -100,12 +85,10 @@ describe('UserRepository', () => {
       email: faker.internet.email(),
     };
     const user = await userRepository.subscribe(attemptUserToSubscribe);
-    const users = await userRepository.getAll();
 
     expect(user?.email).toEqual(attemptUserToSubscribe.email);
-    expect(users).toEqual(expect.arrayContaining([user]));
-    expect(fsUserWriteOneMock).toHaveBeenCalledTimes(1);
-    expect(fsUserWriteOneMock).toBeCalledWith(
+    expect(fileUserStorage.writeOne).toHaveBeenCalledTimes(1);
+    expect(fileUserStorage.writeOne).toBeCalledWith(
       expect.objectContaining(attemptUserToSubscribe),
     );
   });

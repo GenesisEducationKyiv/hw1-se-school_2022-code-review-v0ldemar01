@@ -4,14 +4,14 @@ import {
   IUserDto,
   ISubscribeUserDto,
 } from '../../../common/model-types/model-types.js';
-import { FileUserStorage } from '../file-user-storage/file-user-storage.repository.js';
+import { IFileUserStorage } from '../file-user-storage/file-user-storage.repository.js';
 
 interface IUserRepositoryConstructor {
-  storage: FileUserStorage;
+  storage: IFileUserStorage;
 }
 
 class User {
-  #storage: FileUserStorage;
+  #storage: IFileUserStorage;
 
   constructor({ storage }: IUserRepositoryConstructor) {
     this.#storage = storage;

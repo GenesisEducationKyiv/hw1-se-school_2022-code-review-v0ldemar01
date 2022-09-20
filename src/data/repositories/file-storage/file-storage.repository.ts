@@ -4,7 +4,18 @@ interface IFileStorageConstructor {
   filePath: string;
 }
 
-class FileStorage {
+interface IFileStorage<T> {
+  fileExists: () => Promise<void>;
+  getAllContent: <K>() => Promise<K>;
+  getItemsByKey: (key: string) => Promise<T[]>;
+  getEntityByKeyAndSearch: (key: string, search: Partial<T>) => Promise<T | null>;
+  writeItemsByKey: (key: string, items: T[]) => Promise<void>;
+  clearItemsByKey: (key: string) => Promise<void>;
+  clearAllContent: () => Promise<void>;
+  writeData: (data: Record<string, T[]>) => Promise<void>;
+}
+
+class FileStorage<T extends Record<string, unknown>> implements IFileStorage<T> {
   #filePath: string;
 
   constructor({ filePath }: IFileStorageConstructor) {
@@ -15,33 +26,31 @@ class FileStorage {
     return fs.access(this.#filePath, constants.F_OK);
   }
 
-  async getAllContent<T>(): Promise<T> {
+  async getAllContent<K>(): Promise<K> {
     await this.fileExists();
 
     return JSON.parse((await fs.readFile(this.#filePath, 'utf-8')));
   }
 
-  async getItemsByKey<T>(key: string): Promise<T[]> {
+  async getItemsByKey(key: string): Promise<T[]> {
     const data = (await this.getAllContent<Record<string, T[]>>() as Record<string, T[]>);
 
     return data[key];
   }
 
-  async getEntityByKeyAndSearch<T>(key: string, search: Partial<T>): Promise<T | null> {
-    const entities = await this.getItemsByKey<T>(key);
+  async getEntityByKeyAndSearch(key: string, search: Partial<T>): Promise<T | null> {
+    const entities = await this.getItemsByKey(key);
     const currentUser = (entities ?? []).find((entity) => {
       return Object.entries(search).every(
-        ([searchKey, searchValue]) => entity[searchKey as keyof T] === searchValue,
+        ([searchKey, searchValue]) => entity[searchKey] === searchValue,
       );
     });
 
-    return currentUser ?? null;
+    return (currentUser as T) ?? null;
   }
 
-  async writeItemsByKey<
-    T,
-  >(key: string, items: T[]): Promise<void> {
-    const data = (await this.getAllContent<Record<string, T[]>>() as Record<string, T[]>);
+  async writeItemsByKey(key: string, items: T[]): Promise<void> {
+    const data = (await this.getAllContent<Record<string, T[]>>());
     data[key] = (data[key] ?? []).concat(items);
     this.writeData(data);
   }
@@ -54,9 +63,9 @@ class FileStorage {
     return this.writeData({});
   }
 
-  writeData<T>(data: T): Promise<void> {
+  writeData(data: Record<string, T[]>): Promise<void> {
     return fs.writeFile(this.#filePath, JSON.stringify(data, null, 2));
   }
 }
 
-export { FileStorage };
+export { FileStorage, type IFileStorage };

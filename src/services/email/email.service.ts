@@ -33,7 +33,7 @@ class Email {
   }
 
   private async _sendEmail(emailOptions: Mail.Options): Promise<SMTPTransport.SentMessageInfo> {
-    return this.#emailTransporter.transporter.sendMail(emailOptions);
+    return this.#emailTransporter.sendEmailViaTransporter(emailOptions);
   }
 }
 

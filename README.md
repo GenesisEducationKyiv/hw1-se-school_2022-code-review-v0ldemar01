@@ -1,4 +1,4 @@
-# gses-test-task
+# gses-test-task for review
 ## How to Run
 
 ### Create and fill .env file.
