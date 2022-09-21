@@ -1,1 +1,3 @@
-export { ICurrencyBTCInUAHDTo } from './currency-btc-in-uah/currency-btc-in-uah.js';
+export { type ICoinbaseBuyDto } from './coinbase/coinbase.js';
+export { type IBinanceTickerDto } from './binance/binance.js';
+export { type ICryptocompareSymDto } from './cryptocompare/cryptocompare.js';
