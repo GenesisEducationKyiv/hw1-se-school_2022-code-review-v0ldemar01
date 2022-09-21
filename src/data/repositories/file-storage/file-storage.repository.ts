@@ -4,7 +4,18 @@ interface IFileStorageConstructor {
   filePath: string;
 }
 
-class FileStorage<T extends Record<string, unknown>> {
+interface IFileStorage<T> {
+  fileExists: () => Promise<void>;
+  getAllContent: <K>() => Promise<K>;
+  getItemsByKey: (key: string) => Promise<T[]>;
+  getEntityByKeyAndSearch: (key: string, search: Partial<T>) => Promise<T | null>;
+  writeItemsByKey: (key: string, items: T[]) => Promise<void>;
+  clearItemsByKey: (key: string) => Promise<void>;
+  clearAllContent: () => Promise<void>;
+  writeData: (data: Record<string, T[]>) => Promise<void>;
+}
+
+class FileStorage<T extends Record<string, unknown>> implements IFileStorage<T> {
   #filePath: string;
 
   constructor({ filePath }: IFileStorageConstructor) {
@@ -57,4 +68,4 @@ class FileStorage<T extends Record<string, unknown>> {
   }
 }
 
-export { FileStorage };
+export { FileStorage, type IFileStorage };

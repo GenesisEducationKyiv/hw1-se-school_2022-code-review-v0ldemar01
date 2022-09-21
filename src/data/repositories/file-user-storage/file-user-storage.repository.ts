@@ -1,19 +1,27 @@
 import { IUserDto } from '~/common/model-types/model-types.js';
-import { FileStorage } from '../file-storage/file-storage.repository.js';
+import { IFileStorage } from '../file-storage/file-storage.repository.js';
 
 interface IFileEmailStorageConstructor {
-  storage: FileStorage<IUserDto>;
+  storage: IFileStorage<IUserDto>;
 }
 
-class FileUserStorage {
-  #storage: FileStorage<IUserDto>;
+interface IFileUserStorage {
+  getAll: () => Promise<IUserDto[]>;
+  getOne: (search: Partial<IUserDto>) => Promise<IUserDto | null>;
+  writeOne: (user: IUserDto) => Promise<void>;
+  writeAll: (users: IUserDto[]) => Promise<void>;
+  truncateAll: () => Promise<void>;
+}
+
+class FileUserStorage implements IFileUserStorage {
+  #storage: IFileStorage<IUserDto>;
   #storageKey = 'users';
 
   constructor({ storage }: IFileEmailStorageConstructor) {
     this.#storage = storage;
   }
 
-  get storage(): FileStorage<IUserDto> {
+  get storage(): IFileStorage<IUserDto> {
     return this.#storage;
   }
 
@@ -42,4 +50,4 @@ class FileUserStorage {
   }
 }
 
-export { FileUserStorage };
+export { FileUserStorage, type IFileUserStorage };
