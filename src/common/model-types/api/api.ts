@@ -1,6 +1,9 @@
 export {
-  IGetBTCInUAHFullResponseDto,
-  IGetBTCInUAHResponseDto,
+  type IGetRateAbstractResponseDto,
+  type IGetRateCoinbaseResponseDto,
+  type IGetRateCoinbaseApiResponseDto,
+  type IGetRateCryptocompareResponseDto,
+  type IGetRateCryptocompareApiResponseDto,
 } from './currency/currency.js';
 export {
   ISubscribeUserRequestDto,
