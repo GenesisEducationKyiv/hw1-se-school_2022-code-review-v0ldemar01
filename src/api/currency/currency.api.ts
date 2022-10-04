@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 
-import { HttpCode, HttpMethod, CurrencyApiPath } from '../../common/enums/enums.js';
-import { Currency as CurrencyService } from '../../services/services.js';
+import { HttpCode, HttpMethod, CurrencyApiPath, Currency } from '../../common/enums/enums.js';
+import { AbstractCurrency as CurrencyService } from '../../services/services.js';
 
 interface IInitCurrencyApiOptions {
   services: {
@@ -16,7 +16,7 @@ const initCurrencyApi: FastifyPluginAsync<IInitCurrencyApiOptions> = async (fast
     method: HttpMethod.GET,
     url: CurrencyApiPath.GetRate,
     handler: async (_req, rep) => {
-      const result = await currencyService.getBTCInUAH();
+      const result = await currencyService.getRate({ from: Currency.BTC, to: Currency.UAH });
 
       return rep.status(HttpCode.OK).send(result);
     },

@@ -1,0 +1,1 @@
+export { type IBinanceTickerDto } from './binance-ticker.dto';

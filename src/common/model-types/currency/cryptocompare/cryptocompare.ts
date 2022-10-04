@@ -1,0 +1,1 @@
+export { type ICryptocompareSymDto } from './cryptocompare-sym.dto';
