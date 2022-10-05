@@ -1,4 +1,3 @@
-export { IDbCollection } from './db/db.js';
 export { IHttpOptions } from './http/http.js';
 export { ISubscribeUserDto, IUserDto } from './user/user.js';
 export {

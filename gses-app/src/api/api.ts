@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 
 import { ValidationSchema } from '~/common/model-types/model-types.js';
 import {
-  Currency as CurrencyService,
+  AbstractCurrency as CurrencyService,
   Subscription as SubscriptionService,
 } from '../services/services.js';
 import { initCurrencyApi } from './currency/currency.api.js';

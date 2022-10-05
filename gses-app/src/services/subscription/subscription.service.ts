@@ -1,4 +1,4 @@
-import { ExceptionMessage } from '../../common/enums/enums.js';
+import { Currency, ExceptionMessage } from '../../common/enums/enums.js';
 import { SubscriptionError } from '../../exceptions/exceptions.js';
 import {
   ISubscribeUserRequestDto,
@@ -6,8 +6,8 @@ import {
 import { User as UserRepository } from '../../data/repositories/repositories.js';
 import {
   Email as EmailService,
-  Currency as CurrencyService,
-} from '../../services/services.js';
+  AbstractCurrency as CurrencyService,
+} from '../services.js';
 
 interface ISubscriptionServiceConstructor {
   currencyService: CurrencyService;
@@ -41,7 +41,7 @@ class Subscription {
   async sendEmails(): Promise<void> {
     const users = await this.#userRepository.getAll();
     const receiverString = users.map(({ email }) => email).join(', ');
-    const getCurrentRate = await this.#currencyService.getBTCInUAH();
+    const getCurrentRate = await this.#currencyService.getRate({ from: Currency.BTC, to: Currency.UAH });
 
     await this.#emailService.sendCurrentBTCToUAHCurrencyEmail({
       to: receiverString,

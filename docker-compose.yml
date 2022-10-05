@@ -5,7 +5,7 @@ services:
     container_name: gsestesttask
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./gses-app/Dockerfile
     env_file:
       - .env
     ports:

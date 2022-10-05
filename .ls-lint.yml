@@ -6,4 +6,5 @@ ls:
 ignore:
   - .git
   - node_modules
-  - build
+  - gses-app/node_modules
+  - gses-app/build

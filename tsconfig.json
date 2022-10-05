@@ -1,12 +1,7 @@
 {
-    "include": ["src"],
     "lib": ["esnext"],
     "exclude": ["node_modules"],
     "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "~/*": ["./src/*"]
-      },
       "outDir": "build",
       "module": "ESNext",
       "target": "ESNext",
@@ -25,5 +20,5 @@
       "esm": true,
       "transpileOnly": true,
       "files": true,
-  },
   }
+}
