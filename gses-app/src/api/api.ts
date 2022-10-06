@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 
-import { ValidationSchema } from '~/common/model-types/model-types.js';
+import { ValidationSchema } from '../common/model-types/model-types.js';
 import {
   AbstractCurrency as CurrencyService,
   Subscription as SubscriptionService,

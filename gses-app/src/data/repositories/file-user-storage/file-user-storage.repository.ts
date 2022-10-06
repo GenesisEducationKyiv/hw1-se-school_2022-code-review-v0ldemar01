@@ -1,4 +1,4 @@
-import { IUserDto } from '~/common/model-types/model-types.js';
+import { IUserDto } from '../../../common/model-types/model-types.js';
 import { IFileStorage } from '../file-storage/file-storage.repository.js';
 
 interface IFileEmailStorageConstructor {

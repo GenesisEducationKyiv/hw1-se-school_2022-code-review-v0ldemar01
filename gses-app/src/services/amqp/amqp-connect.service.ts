@@ -1,4 +1,4 @@
-import { AmqpExchange } from '~/common/enums/enums.js';
+import { AmqpExchange } from '../../common/enums/enums.js';
 import { Amqp } from './amqp.service.js';
 
 const initAmqpConnectService = async ({

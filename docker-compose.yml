@@ -1,8 +1,25 @@
 version: '3.9'
 
 services:
-  gsestesttask:
-    container_name: gsestesttask
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    # hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 2s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
+    restart: always
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq
+  gses-app:
+    container_name: gses-app
     build:
       context: .
       dockerfile: ./gses-app/Dockerfile
@@ -10,15 +27,33 @@ services:
       - ./gses-app/.env
     ports:
       - 5000:5000
-  rabbitmq:
-    image: rabbitmq:3.8-management-alpine
-    container_name: rabbitmq
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm run start
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  logger-app:
+    container_name: logger-app
+    build:
+      context: .
+      dockerfile: ./logger-app/Dockerfile
+    env_file:
+      - ./logger-app/.env
     ports:
-      - 5673:5672
-      - 15673:15672
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq:/var/log/rabbitmq
+      - 5001:5001
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm run start
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   rabbitmq:

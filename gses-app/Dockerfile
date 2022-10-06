@@ -1,12 +1,8 @@
 FROM node:lts-alpine
-WORKDIR /usr/src/app
-COPY package*.json tsconfig.json ./
-COPY ./gses-app ./gses-app
+WORKDIR /gses-app
+COPY ./gses-app/package*.json ./
 RUN npm ci
 
-COPY . .
+COPY ./gses-app tsconfig.json ./
 
 RUN npm run build
-
-CMD ["npm", "start"]
-EXPOSE 5000
