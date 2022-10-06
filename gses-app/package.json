@@ -1,0 +1,55 @@
+{
+  "name": "gses-test-task",
+  "version": "1.0.0",
+  "description": "Cryptocurrency rate wrapper service",
+  "type": "module",
+  "main": "src/app.ts",
+  "engines": {
+    "node": ">=16 <17",
+    "npm": ">=7 <9"
+  },
+  "scripts": {
+    "start:dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
+    "start": "node ./build/src/app.js",
+    "lint:js": "npx eslint \"src/**/*.ts\"",
+    "lint": "npm run lint:fs && npm run lint:js",
+    "clean": "rimraf build",
+    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json",
+    "postbuild": "copyfiles -u 1 src/documentation/*.yaml build/src/",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+  },
+  "author": "Volodymyr Minchenko",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "8.0.0",
+    "@fastify/formbody": "^7.0.1",
+    "@fastify/swagger": "^7.4.1",
+    "amqplib": "0.10.3",
+    "axios": "0.27.2",
+    "dotenv": "16.0.1",
+    "fastify": "4.3.0",
+    "joi": "17.6.0",
+    "nodemailer": "^6.7.7",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "7.5.0",
+    "@jest/globals": "29.0.2",
+    "@ls-lint/ls-lint": "1.11.2",
+    "@types/amqplib": "^0.8.2",
+    "@types/jest": "^29.0.0",
+    "@types/node": "18.6.1",
+    "@types/nodemailer": "^6.4.4",
+    "@types/uuid": "^8.3.4",
+    "copyfiles": "2.4.1",
+    "jest": "28.1.3",
+    "nodemon": "2.0.19",
+    "pino-pretty": "8.1.0",
+    "rimraf": "3.0.2",
+    "ts-jest": "28.0.8",
+    "ts-node": "10.9.1",
+    "tsc-alias": "1.7.0",
+    "tsconfig-paths": "4.0.0",
+    "typescript": "4.7.4"
+  }
+}
