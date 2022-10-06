@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "0.10.3",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "pino": "^8.6.1",
+    "pino-pretty": "^9.1.1"
   },
   "devDependencies": {
     "@types/amqplib": "0.8.2",
