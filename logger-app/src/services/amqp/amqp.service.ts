@@ -1,6 +1,8 @@
 import { Channel, connect } from 'amqplib';
 import {
-  IAmqpPublish,
+  IAmqpConsume,
+  IAmqpBindQueue,
+  IAmqpAssertQueue,
   IAmqpAssertExchange,
 } from '../../common/model-types/model-types.js';
 
@@ -26,15 +28,11 @@ class Amqp {
     return new Amqp({ amqpChannel });
   }
 
-  connect(channel: Channel): void {
-    this.#amqpChannel = channel;
-  }
-
   async assertExchange({
     exchange,
     type = 'direct',
     options = { durable: true },
-  }: Partial<IAmqpAssertExchange>): Promise<void> {
+  }: IAmqpAssertExchange): Promise<void> {
     await this.#amqpChannel.assertExchange(
       exchange as string,
       type,
@@ -42,11 +40,42 @@ class Amqp {
     );
   }
 
-  async publish({ exchange, routingKey, content }: IAmqpPublish): Promise<boolean> {
-    return this.#amqpChannel.publish(
+  async assertQueue({
+    queue,
+    options = { exclusive: false },
+  }: IAmqpAssertQueue): Promise<void> {
+    await this.#amqpChannel.assertQueue(
+      queue as string,
+      options,
+    );
+  }
+
+  async bindQueue({
+    queue,
+    exchange,
+    routingKey,
+  }: IAmqpBindQueue): Promise<void> {
+    await this.#amqpChannel.bindQueue(
+      queue as string,
       exchange,
       routingKey,
-      Buffer.from(JSON.stringify(content)),
+    );
+  }
+
+  async consume({
+    queue,
+    onMessage,
+    options = { noAck: false },
+  }: IAmqpConsume): Promise<void> {
+    await this.#amqpChannel.consume(
+      queue,
+      (msg) => {
+        if (msg) {
+          this.#amqpChannel.ack(msg);
+          onMessage(msg.content);
+        }
+      },
+      options,
     );
   }
 }

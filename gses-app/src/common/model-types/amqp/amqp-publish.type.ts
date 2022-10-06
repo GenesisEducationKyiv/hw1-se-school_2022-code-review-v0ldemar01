@@ -1,8 +1,8 @@
-import { AmqpExchange } from '../../enums/enums.js';
+import { AmqpExchange, AmqpRoutingKey } from '../../enums/enums.js';
 
 interface IAmqpPublish {
   exchange: AmqpExchange;
-  severity: string;
+  routingKey: AmqpRoutingKey;
   content: unknown;
 }
 

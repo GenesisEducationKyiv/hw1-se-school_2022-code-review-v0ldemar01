@@ -9,7 +9,6 @@
     "npm": ">=7 <9"
   },
   "scripts": {
-    "lint:fs": "ls-lint",
     "start:dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
     "start": "node ./build/app.js",
     "lint:js": "npx eslint \"src/**/*.ts\"",
