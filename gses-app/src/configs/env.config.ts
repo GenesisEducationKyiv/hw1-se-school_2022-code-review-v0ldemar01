@@ -6,6 +6,8 @@ const {
   PORT,
   HOST,
   CACHING_TIME,
+  RABBITMQ_HOST,
+  RABBITMQ_PORT,
   EMAIL_USERNAME,
   EMAIL_PASSWORD,
   BINANCE_CURRENCY_URL,
@@ -46,6 +48,10 @@ const ENV = {
     USERNAME: String(EMAIL_USERNAME),
     PASSWORD: String(EMAIL_PASSWORD),
   },
+  RABBITMQ: {
+    URL: `amqp://${String(RABBITMQ_HOST)}:${Number(RABBITMQ_PORT)}`,
+  },
+
 } as const;
 
 export { ENV };

@@ -11,8 +11,8 @@ import {
 import { ENV } from '../../src/configs/configs.js';
 import { buildApp } from '../helpers/helpers.js';
 
-describe('testing api endpoints', () => {
-  const app = buildApp();
+describe('testing api endpoints', async () => {
+  const app = await buildApp();
 
   describe(`${ENV.API.V1_PREFIX}${CurrencyApiPath.GetRate} endpoint`, () => {
     it('should return 200 and number response', async () => {

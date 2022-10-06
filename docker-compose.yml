@@ -7,6 +7,19 @@ services:
       context: .
       dockerfile: ./gses-app/Dockerfile
     env_file:
-      - .env
+      - ./gses-app/.env
     ports:
       - 5000:5000
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq
+
+volumes:
+  rabbitmq:
+    driver: local

@@ -3,8 +3,8 @@ import { FastifyInstance } from 'fastify';
 
 import { buildServer } from '../../../src/server.js';
 
-const buildApp = (): FastifyInstance => {
-  const app = buildServer({
+const buildApp = async (): Promise<FastifyInstance> => {
+  const app = await buildServer({
     logger: false,
   });
 

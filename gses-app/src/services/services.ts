@@ -1,24 +1,32 @@
-import { CurrencyProvider } from '../common/enums/enums.js';
+import { AmqpExchange, CurrencyProvider } from '../common/enums/enums.js';
 import { ENV } from '../configs/env.config.js';
 import { Http } from './http/http.service.js';
+import { Amqp } from './amqp/amqp.service.js';
 import { Email } from './email/email.service.js';
 import { initCurrencyServices } from './currency/currency.service.js';
 import { Subscription } from './subscription/subscription.service.js';
 import { initRepositories } from '../data/repositories/repositories.js';
 import { AbstractCurrency } from './currency/abstract-currency.service.js';
 import { EmailTransporter } from './email-transporter/email-transporter.service.js';
+import { initAmqpConnectService } from './amqp/amqp-connect.service.js';
 
 interface IInitServicesReturn {
   http: Http;
+  amqp: Amqp;
   email: Email;
   subscription: Subscription;
   currency: AbstractCurrency;
 }
 
-const initServices = (repositories: ReturnType<typeof initRepositories>): IInitServicesReturn => {
+const initServices = async (repositories: ReturnType<typeof initRepositories>): Promise<IInitServicesReturn> => {
   const { user: userRepository } = repositories;
 
   const http = new Http();
+
+  const amqp = await initAmqpConnectService({
+    amqpUrl: ENV.RABBITMQ.URL,
+    amqpExchange: AmqpExchange.LOGS,
+  });
 
   const emailTransporter = new EmailTransporter({
     options: {
@@ -49,7 +57,7 @@ const initServices = (repositories: ReturnType<typeof initRepositories>): IInitS
     currencyService: currency,
   });
 
-  return { http, currency, subscription, email };
+  return { amqp, http, currency, subscription, email };
 };
 
 export { initServices, type Http, type AbstractCurrency, type Subscription, type Email };
