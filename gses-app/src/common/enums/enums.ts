@@ -10,6 +10,7 @@ export {
   HttpHeader,
   ContentType,
 } from './http/http.js';
+export { EventName } from './event/event.js';
 export { ExceptionMessage, ExceptionName } from './exception/exception.js';
 export { UserValidationMessage } from './validation/validation.js';
 export { Currency, CurrencyProvider } from './currency/currency.js';

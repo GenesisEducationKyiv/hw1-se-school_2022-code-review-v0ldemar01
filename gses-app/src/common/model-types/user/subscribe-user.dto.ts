@@ -1,3 +1,3 @@
-export interface ISubscribeUserDto extends Record<string, unknown> {
+export interface ISubscribeUserDto {
   email: string;
 }

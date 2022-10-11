@@ -9,12 +9,14 @@ export {
   ISubscribeUserRequestDto,
   IGetRateAbstractResponseDto,
   IGetRateCoinbaseResponseDto,
+  ICreateCustomerRejectedResult,
   IGetRateCoinbaseApiResponseDto,
   IGetRateCryptocompareResponseDto,
   IGetRateCryptocompareApiResponseDto,
 } from './api/api.js';
 export {
   IAmqpPublish,
+  IAmqpConsume,
   IAmqpAssertQueue,
   IAmqpSendToQueue,
   IAmqpAssertExchange,

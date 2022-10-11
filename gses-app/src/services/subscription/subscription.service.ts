@@ -38,6 +38,18 @@ class Subscription {
     await this.#userRepository.subscribe({ email });
   }
 
+  async unsubscribeUser({ email }: ISubscribeUserRequestDto): Promise<void> {
+    const existingUser = await this.#userRepository.getOne({ email });
+
+    if (!existingUser) {
+      throw new SubscriptionError({
+        message: ExceptionMessage.USER_NOT_EXISTS,
+      });
+    }
+
+    await this.#userRepository.unsubscribe({ email });
+  }
+
   async sendEmails(): Promise<void> {
     const users = await this.#userRepository.getAll();
     const receiverString = users.map(({ email }) => email).join(', ');

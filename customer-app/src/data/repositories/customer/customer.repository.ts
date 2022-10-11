@@ -28,6 +28,20 @@ class Customer {
     return this.findOne(search);
   }
 
+  async deleteOne(search: Partial<IUserDto>): Promise<boolean> {
+    let isUserExist = false;
+    this.#userCollection = this.#userCollection.filter((user) => {
+      const iterationChecks = Object.entries(search).every(
+        ([key, value]) => user[key as keyof IUserDto] === value,
+      );
+      if (iterationChecks) {
+        isUserExist = iterationChecks;
+      }
+      return iterationChecks;
+    });
+    return Promise.resolve(isUserExist);
+  }
+
   async findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
     const user = this.#userCollection.find((user) => {
       return Object.entries(search).every(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { v4 } from 'uuid';
 
 import {
@@ -35,6 +36,10 @@ class User {
     await this.#storage.writeOne(newUser);
 
     return newUser;
+  }
+
+  async unsubscribe(search: Partial<IUserDto>): Promise<void> {
+    // todo
   }
 }
 

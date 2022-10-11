@@ -1,9 +1,10 @@
 import { Channel, connect } from 'amqplib';
 import {
   IAmqpPublish,
-  IAmqpAssertExchange,
+  IAmqpConsume,
   IAmqpSendToQueue,
   IAmqpAssertQueue,
+  IAmqpAssertExchange,
 } from '../../common/model-types/model-types.js';
 
 interface IAmqpServiceConstructor {
@@ -54,10 +55,16 @@ class Amqp {
     );
   }
 
-  async sendToQueue({ queue, content }: IAmqpSendToQueue): Promise<boolean> {
+  async sendToQueue({
+    queue,
+    content,
+    options = {
+      persistent: true,
+    } }: IAmqpSendToQueue): Promise<boolean> {
     return this.#amqpChannel.sendToQueue(
       queue,
       Buffer.from(JSON.stringify(content)),
+      options,
     );
   }
 
@@ -66,6 +73,23 @@ class Amqp {
       exchange,
       routingKey,
       Buffer.from(JSON.stringify(content)),
+    );
+  }
+
+  async consume({
+    queue,
+    onMessage,
+    options = { noAck: false },
+  }: IAmqpConsume): Promise<void> {
+    await this.#amqpChannel.consume(
+      queue,
+      (msg) => {
+        if (msg) {
+          this.#amqpChannel.ack(msg);
+          onMessage(msg.content);
+        }
+      },
+      options,
     );
   }
 }

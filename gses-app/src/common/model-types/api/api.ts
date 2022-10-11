@@ -8,3 +8,6 @@ export {
 export {
   ISubscribeUserRequestDto,
 } from './subscription/subscription.js';
+export {
+  type ICreateCustomerRejectedResult,
+} from './customer/customer';
