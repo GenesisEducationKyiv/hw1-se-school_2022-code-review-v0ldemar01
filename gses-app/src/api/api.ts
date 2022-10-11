@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 
 import { ValidationSchema } from '../common/model-types/model-types.js';
+import { UserSaga } from '../sagas/sagas.js';
 import {
   AbstractCurrency as CurrencyService,
   Subscription as SubscriptionService,
@@ -12,12 +13,13 @@ interface IInitApiOptions {
   services: {
     currency: CurrencyService;
     subscription: SubscriptionService;
+    userSaga: UserSaga;
   };
 }
 
 const initApi: FastifyPluginAsync<IInitApiOptions> = async (
   fastify,
-  { services: { currency, subscription } },
+  { services: { currency, userSaga, subscription } },
 ) => {
   fastify.setValidatorCompiler<ValidationSchema>(({
     schema,
@@ -31,6 +33,7 @@ const initApi: FastifyPluginAsync<IInitApiOptions> = async (
   fastify.register(initSubscriptionApi, {
     services: {
       subscription,
+      userSaga,
     },
   });
 };

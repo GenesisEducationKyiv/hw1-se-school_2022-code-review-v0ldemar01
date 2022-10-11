@@ -8,6 +8,7 @@ import { initApi } from './api/api.js';
 import { initServices } from './services/services.js';
 import { initDatabase } from './data/data.js';
 import { AmqpExchange, AmqpRoutingKey } from './common/enums/enums.js';
+import { initSagas } from './sagas/sagas.js';
 
 const buildServer = async (opts: FastifyServerOptions = {}): Promise<FastifyInstance> => {
   const app = Fastify(opts);
@@ -20,6 +21,7 @@ const buildServer = async (opts: FastifyServerOptions = {}): Promise<FastifyInst
 
   const repositories = initDatabase();
   const { amqp, currency, subscription } = await initServices(repositories);
+  const { userSaga } = initSagas({ amqp, subscription });
 
   app.setErrorHandler((error, _, reply) => {
     amqp.publish({
@@ -35,6 +37,7 @@ const buildServer = async (opts: FastifyServerOptions = {}): Promise<FastifyInst
     services: {
       currency,
       subscription,
+      userSaga,
     },
     prefix: ENV.API.V1_PREFIX,
   });

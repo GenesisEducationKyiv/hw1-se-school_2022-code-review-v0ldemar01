@@ -8,5 +8,7 @@ ignore:
   - node_modules
   - gses-app/node_modules
   - gses-app/build
+  - customer-app/node_modules
+  - customer-app/build
   - logger-app/node_modules
   - logger-app/build

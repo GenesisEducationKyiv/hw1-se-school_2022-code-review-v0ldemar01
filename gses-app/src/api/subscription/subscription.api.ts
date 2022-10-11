@@ -6,15 +6,16 @@ import {
   subscribeUser as subscribeUserValidationSchema,
 } from '../../validation-schemas/validation-schemas.js';
 import { Subscription as SubscriptionService } from '../../services/services.js';
-
+import { UserSaga } from '../../sagas/sagas.js';
 interface IInitSubscriptionApiOptions {
   services: {
     subscription: SubscriptionService;
+    userSaga: UserSaga;
   };
 }
 
 const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = async (fastify, opts) => {
-  const { subscription: subscriptionService } = opts.services;
+  const { userSaga, subscription: subscriptionService } = opts.services;
 
   fastify.route({
     method: HttpMethod.POST,
@@ -24,7 +25,7 @@ const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = asy
     },
     handler: async (req: FastifyRequest<{ Body: ISubscribeUserRequestDto }>, rep) => {
       try {
-        await subscriptionService.subscribeUser({ email: req.body.email });
+        await userSaga.subscribeUser({ email: req.body.email });
 
         return rep.status(HttpCode.OK).send();
       } catch (err) {

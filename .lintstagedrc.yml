@@ -1,2 +1,2 @@
 '*': npm run lint:fs
-'{gses-app, logger-app}/**/*.ts': npm run lint:js
+'{gses-app, customer-app, logger-app}/**/*.ts': npm run lint:js

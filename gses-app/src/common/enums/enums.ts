@@ -13,4 +13,4 @@ export {
 export { ExceptionMessage, ExceptionName } from './exception/exception.js';
 export { UserValidationMessage } from './validation/validation.js';
 export { Currency, CurrencyProvider } from './currency/currency.js';
-export { AmqpExchange, AmqpRoutingKey } from './amqp/amqp.js';
+export { AmqpQueue, AmqpExchange, AmqpRoutingKey } from './amqp/amqp.js';

@@ -13,5 +13,10 @@ export {
   IGetRateCryptocompareResponseDto,
   IGetRateCryptocompareApiResponseDto,
 } from './api/api.js';
-export { IAmqpPublish, IAmqpAssertExchange } from './amqp/amqp.js';
+export {
+  IAmqpPublish,
+  IAmqpAssertQueue,
+  IAmqpSendToQueue,
+  IAmqpAssertExchange,
+} from './amqp/amqp.js';
 export { ValidationSchema } from './validation/validation.js';

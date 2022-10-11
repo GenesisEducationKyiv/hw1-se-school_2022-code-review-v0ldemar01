@@ -1,4 +1,4 @@
-import { AmqpExchange, CurrencyProvider } from '../common/enums/enums.js';
+import { AmqpExchange, AmqpQueue, CurrencyProvider } from '../common/enums/enums.js';
 import { ENV } from '../configs/env.config.js';
 import { Http } from './http/http.service.js';
 import { Amqp } from './amqp/amqp.service.js';
@@ -25,7 +25,8 @@ const initServices = async (repositories: ReturnType<typeof initRepositories>): 
 
   const amqp = await initAmqpConnectService({
     amqpUrl: ENV.RABBITMQ.URL,
-    amqpExchange: AmqpExchange.LOGS,
+    exchange: AmqpExchange.LOGS,
+    queues: [AmqpQueue.CUSTOMERS, AmqpQueue.CUSTOMERS_REPLY],
   });
 
   const emailTransporter = new EmailTransporter({
@@ -60,4 +61,4 @@ const initServices = async (repositories: ReturnType<typeof initRepositories>): 
   return { amqp, http, currency, subscription, email };
 };
 
-export { initServices, type Http, type AbstractCurrency, type Subscription, type Email };
+export { initServices, type Http, type AbstractCurrency, type Subscription, type Email, type Amqp };
