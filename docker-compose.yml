@@ -54,7 +54,24 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-
+  customer-app:
+    container_name: customer-app
+    build:
+      context: .
+      dockerfile: ./customer-app/Dockerfile
+    env_file:
+      - ./customer-app/.env
+    ports:
+      - 5002:5002
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm run start
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 volumes:
   rabbitmq:
     driver: local
